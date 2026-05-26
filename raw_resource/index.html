@@ -117,18 +117,18 @@
     </section>
 
     <!-- SEARCH & FILTER BAR -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sticky top-16 z-30 py-3 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
-        <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
-            <!-- Search input -->
-            <div class="relative flex-1 max-w-full md:max-w-md">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
-                    <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sticky top-16 z-30 py-4 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
+        <div class="flex flex-col gap-4">
+            <!-- Row 1: Search input (Trải rộng đầy đủ) -->
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </span>
-                <input type="text" id="searchInput" oninput="filterTopics()" placeholder="Tìm kiếm chủ đề bạn quan tâm..." class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm transition-all shadow-sm">
+                <input type="text" id="searchInput" oninput="filterTopics()" placeholder="Tìm kiếm chủ đề bạn quan tâm..." class="w-full pl-11 pr-4 py-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm transition-all shadow-sm">
             </div>
 
-            <!-- Categories pills -->
-            <div class="flex flex-wrap items-center gap-2 md:gap-1.5">
+            <!-- Row 2: Categories pills (Hiển thị ngay hàng dưới) -->
+            <div class="flex flex-wrap items-center gap-2">
                 <button onclick="setCategoryFilter('all')" class="category-btn active px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-500/10">
                     Tất cả
                 </button>
@@ -224,7 +224,6 @@
                 <div>
                     <label for="identityInput" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Dãy số định danh của bạn</label>
                     <div class="relative">
-                        <!-- Đã fix bug text màu đen trong dark mode bằng cách thêm: text-slate-900 dark:text-white -->
                         <input type="text" id="identityInput" placeholder="123 456 789" maxlength="11"
                                class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-center font-mono text-xl tracking-widest font-bold text-slate-900 dark:text-white placeholder-slate-300 dark:placeholder-slate-700">
                     </div>
@@ -325,7 +324,7 @@
             { id: 17, title: "Nên cấm hoàn toàn đồ nhựa dùng một lần bất chấp sự bất tiện trước mắt?", category: "society", upVotes: 450, downVotes: 78 },
             { id: 18, title: "Nghệ thuật tạo ra bởi Trí tuệ nhân tạo (AI Art) có thực sự là nghệ thuật?", category: "tech", upVotes: 210, downVotes: 405 },
             { id: 19, title: "Học ngoại ngữ qua ứng dụng điện thoại (Duolingo) hiệu quả hơn học trung tâm?", category: "lifestyle", upVotes: 230, downVotes: 290 },
-            { id: 20, title: "Xuương sống sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?", category: "lifestyle", upVotes: 388, downVotes: 110 },
+            { id: 20, title: "Xu hướng sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?", category: "lifestyle", upVotes: 388, downVotes: 110 },
             { id: 21, title: "Thể thao điện tử (Esports) xứng đáng được tranh huy chương chính thức tại Olympic?", category: "society", upVotes: 420, downVotes: 190 },
             { id: 22, title: "Con người sẽ xây dựng thành công thuộc địa trên Sao Hỏa trước năm 2050?", category: "future", upVotes: 167, downVotes: 289 },
             { id: 23, title: "Nên cấm trẻ em dưới 12 tuổi tiếp cận với các mạng xã hội phổ biến?", category: "society", upVotes: 498, downVotes: 132 },
