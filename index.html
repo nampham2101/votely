@@ -238,6 +238,62 @@
         </div>
     </div>
 
+    <!-- POPUP XÁC NHẬN XÓA ĐỊNH DANH (CUSTOM MODAL) -->
+    <div id="confirmDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden transition-all duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800/50 transform scale-95 opacity-0 transition-all duration-300 ease-out" id="deleteModalBox">
+            <!-- Icon Warning -->
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/50 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-4">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Xóa mã định danh?</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                Mọi quyền bình chọn của bạn vẫn được lưu trữ, nhưng bạn sẽ phải nhập lại mã định danh mới vào lần bình chọn tiếp theo.
+            </p>
+
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-750 transition-all">
+                    Hủy
+                </button>
+                <button onclick="confirmClearUserIdentity()" class="flex-1 py-3 rounded-xl bg-rose-600 text-white font-semibold text-xs hover:bg-rose-700 transition-all shadow-lg shadow-rose-500/10">
+                    Xác nhận xóa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP XÁC NHẬN RESET TOÀN BỘ DỮ LIỆU (CUSTOM MODAL) -->
+    <div id="confirmResetModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden transition-all duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800/50 transform scale-95 opacity-0 transition-all duration-300 ease-out" id="resetModalBox">
+            <!-- Icon Warning -->
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/50 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Khôi phục cài đặt gốc?</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                Thao tác này sẽ đặt lại toàn bộ lượt vote về trạng thái ban đầu và xóa thông tin định danh của bạn. Hành động này không thể hoàn tác.
+            </p>
+
+            <div class="flex gap-3">
+                <button onclick="closeResetModal()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-750 transition-all">
+                    Hủy
+                </button>
+                <button onclick="confirmResetAllData()" class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all shadow-lg shadow-amber-500/10">
+                    Xác nhận Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- NOTIFICATION SYSTEM -->
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
 
@@ -519,6 +575,7 @@
             }
         }
 
+        // Filter Handlers
         function getCategoryName(cat) {
             switch(cat) {
                 case 'tech': return 'Công nghệ';
@@ -529,7 +586,6 @@
             }
         }
 
-        // Filter Handlers
         function setCategoryFilter(category) {
             state.currentCategory = category;
             
@@ -698,47 +754,83 @@
             }
         }
 
+        // ---------------------------------
+        // CUSTOM CONFIRM MODALS FOR ID DELETE & RESET ALL
+        // ---------------------------------
         function clearUserIdentity() {
-            // Xác nhận tháo gỡ mã định danh một cách thân thiện nhất
-            const confirmMsg = confirm("Bạn có chắc chắn muốn xóa mã định danh hiện tại không? Mọi quyền bình chọn của bạn vẫn sẽ được giữ lại, nhưng bạn sẽ cần nhập lại mã mới ở lượt vote tiếp theo.");
-            if (confirmMsg) {
-                state.userId = null;
-                localStorage.removeItem('votely_userId');
-                renderHeaderUI();
-                showToast("Đã tháo dỡ định danh thành công.", "info");
-            }
+            const modal = document.getElementById('confirmDeleteModal');
+            const box = document.getElementById('deleteModalBox');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 50);
         }
 
-        // ---------------------------------
-        // RESET DỮ LIỆU GỐC (FOR DEBUG/TEST)
-        // ---------------------------------
+        function closeDeleteModal() {
+            const modal = document.getElementById('confirmDeleteModal');
+            const box = document.getElementById('deleteModalBox');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function confirmClearUserIdentity() {
+            state.userId = null;
+            localStorage.removeItem('votely_userId');
+            renderHeaderUI();
+            closeDeleteModal();
+            showToast("Đã gỡ bỏ mã định danh thành công.", "info");
+        }
+
+        // Reset dữ liệu hoàn toàn
         function clearAllData() {
-            const r = confirm("CẢNH BÁO: Thao tác này sẽ đặt lại toàn bộ lượt vote trên trang web về trạng thái ban đầu và xóa thông tin tài khoản của bạn. Bạn vẫn muốn tiếp tục?");
-            if (r) {
-                localStorage.removeItem('votely_userId');
-                localStorage.removeItem('votely_userVotes');
-                localStorage.removeItem('votely_topics');
-                
-                state.userId = null;
-                state.userVotes = {};
-                state.topics = INITIAL_TOPICS;
-                state.currentCategory = 'all';
-                state.searchQuery = '';
-                
-                // Reset categories pills
-                document.querySelectorAll('.category-btn').forEach((btn, index) => {
-                    if (index === 0) {
-                        btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
-                    } else {
-                        btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
-                        btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
-                    }
-                });
-                
-                renderHeaderUI();
-                renderTopics();
-                showToast("Đã khôi phục hoàn toàn cấu hình và dữ liệu gốc!", "success");
-            }
+            const modal = document.getElementById('confirmResetModal');
+            const box = document.getElementById('resetModalBox');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('confirmResetModal');
+            const box = document.getElementById('resetModalBox');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function confirmResetAllData() {
+            localStorage.removeItem('votely_userId');
+            localStorage.removeItem('votely_userVotes');
+            localStorage.removeItem('votely_topics');
+            
+            state.userId = null;
+            state.userVotes = {};
+            state.topics = INITIAL_TOPICS;
+            state.currentCategory = 'all';
+            state.searchQuery = '';
+            
+            // Reset categories pills
+            document.querySelectorAll('.category-btn').forEach((btn, index) => {
+                if (index === 0) {
+                    btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
+                } else {
+                    btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
+                    btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+                }
+            });
+            
+            closeResetModal();
+            renderHeaderUI();
+            renderTopics();
+            showToast("Đã khôi phục hoàn toàn cấu hình và dữ liệu gốc!", "success");
         }
     </script>
 
