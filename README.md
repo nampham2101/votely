@@ -19,7 +19,7 @@ npm install
 npm run dev
 ```
 
-Mở http://localhost:5173
+Mở [http://localhost:5173](http://localhost:5173)
 
 ```bash
 npm run build    # output → dist/
