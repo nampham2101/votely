@@ -118,9 +118,9 @@
 
     <!-- SEARCH & FILTER BAR -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sticky top-16 z-30 py-3 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
-        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
             <!-- Search input -->
-            <div class="relative flex-1 max-w-md">
+            <div class="relative flex-1 max-w-full md:max-w-md">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
                     <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 </span>
@@ -128,20 +128,20 @@
             </div>
 
             <!-- Categories pills -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
-                <button onclick="setCategoryFilter('all')" class="category-btn active px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-500/10">
+            <div class="flex flex-wrap items-center gap-2 md:gap-1.5">
+                <button onclick="setCategoryFilter('all')" class="category-btn active px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-500/10">
                     Tất cả
                 </button>
-                <button onclick="setCategoryFilter('tech')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                <button onclick="setCategoryFilter('tech')" class="category-btn px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
                     👨‍💻 Công nghệ
                 </button>
-                <button onclick="setCategoryFilter('lifestyle')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                <button onclick="setCategoryFilter('lifestyle')" class="category-btn px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
                     🍀 Đời sống
                 </button>
-                <button onclick="setCategoryFilter('society')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                <button onclick="setCategoryFilter('society')" class="category-btn px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
                     🗣️ Tranh cãi
                 </button>
-                <button onclick="setCategoryFilter('future')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                <button onclick="setCategoryFilter('future')" class="category-btn px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
                     🚀 Tương lai
                 </button>
             </div>
@@ -180,13 +180,17 @@
 
     <!-- FOOTER -->
     <footer class="border-t border-slate-200/50 dark:border-slate-900 bg-white dark:bg-slate-950 py-8 transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:items-center sm:justify-between">
-            <p class="text-xs text-slate-400">&copy; 2026 Votely App. Thiết kế tối giản tối ưu cho trải nghiệm tĩnh.</p>
-            <div class="mt-4 sm:mt-0 flex justify-center gap-4 text-xs text-slate-400 font-medium">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:items-center sm:justify-between gap-4">
+            <p class="text-xs text-slate-400 order-2 sm:order-1">&copy; 2026 Votely App. Thiết kế tối giản tối ưu cho trải nghiệm tĩnh.</p>
+            
+            <!-- Links & Email Contact (Đồng bộ thành chữ 'Liên hệ' không icon) -->
+            <div class="mt-4 sm:mt-0 flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-xs text-slate-400 font-medium order-1 sm:order-2">
+                <a href="mailto:allstarsmen@gmail.com" class="hover:text-indigo-500 transition-colors">Liên hệ</a>
+                <span class="text-slate-300 dark:text-slate-800">&bull;</span>
                 <a href="#" class="hover:text-indigo-500 transition-colors">Điều khoản</a>
-                <span>&bull;</span>
+                <span class="text-slate-300 dark:text-slate-800">&bull;</span>
                 <a href="#" class="hover:text-indigo-500 transition-colors">Bảo mật</a>
-                <span>&bull;</span>
+                <span class="text-slate-300 dark:text-slate-800">&bull;</span>
                 <a href="javascript:void(0)" onclick="clearAllData()" class="hover:text-red-500 transition-colors">Reset dữ liệu gốc</a>
             </div>
         </div>
@@ -324,7 +328,7 @@
             { id: 21, title: "Thể thao điện tử (Esports) xứng đáng được tranh huy chương chính thức tại Olympic?", category: "society", upVotes: 420, downVotes: 190 },
             { id: 22, title: "Con người sẽ xây dựng thành công thuộc địa trên Sao Hỏa trước năm 2050?", category: "future", upVotes: 167, downVotes: 289 },
             { id: 23, title: "Nên cấm trẻ em dưới 12 tuổi tiếp cận với các mạng xã hội phổ biến?", category: "society", upVotes: 498, downVotes: 132 },
-            { id: 24, title: "Xem phim tại rạp có trải nghiệm vượt trội hoàn toàn so với xem Netflix tại nhà?", category: "lifestyle", upVotes: 280, downVotes: 250 },
+            { id: 24, title: "Xem phim tại rạp có trải nghiệm vượt trội hoàn toàn so với xem Netflix tại nhà?", category: "lifestyle", minUp: 280, upVotes: 280, downVotes: 250 },
             { id: 25, title: "Cà phê máy pha kiểu Ý ngon và chất lượng hơn cà phê phin truyền thống?", category: "lifestyle", upVotes: 142, downVotes: 399 },
             { id: 26, title: "Nên luật hóa việc cấm sếp nhắn tin trao đổi công việc sau 6 giờ tối?", category: "society", upVotes: 540, downVotes: 60 },
             { id: 27, title: "Xe tự lái hoàn toàn sẽ giảm thiểu tai nạn giao thông hơn con người điều khiển?", category: "future", upVotes: 298, downVotes: 176 },

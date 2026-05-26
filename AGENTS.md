@@ -61,6 +61,10 @@ npm run build
 npm run preview
 ```
 
+## Liên hệ (footer)
+
+- Email: `allstarsmen@gmail.com` — constant `src/constants/site.js` (`CONTACT_EMAIL`)
+
 ## Quy tắc khi chỉnh sửa
 
 1. **Đừng sửa** `raw_resource/` trừ khi user yêu cầu đồng bộ bản gốc.

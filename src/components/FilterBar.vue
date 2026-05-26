@@ -15,8 +15,8 @@ const filterCategories = CATEGORIES.filter((c) => c.id !== 'all')
   <section
     class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sticky top-16 z-30 py-3 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm"
   >
-    <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
-      <div class="relative flex-1 max-w-md">
+    <div class="flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
+      <div class="relative flex-1 max-w-full md:max-w-md">
         <span
           class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400"
         >
@@ -38,10 +38,10 @@ const filterCategories = CATEGORIES.filter((c) => c.id !== 'all')
         />
       </div>
 
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+      <div class="flex flex-wrap items-center gap-2 md:gap-1.5">
         <button
           type="button"
-          class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all"
+          class="px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all"
           :class="
             currentCategory === 'all'
               ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/10'
@@ -55,7 +55,7 @@ const filterCategories = CATEGORIES.filter((c) => c.id !== 'all')
           v-for="cat in filterCategories"
           :key="cat.id"
           type="button"
-          class="px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all"
+          class="px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all"
           :class="
             currentCategory === cat.id
               ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/10'

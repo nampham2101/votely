@@ -22,7 +22,7 @@ export const INITIAL_TOPICS = [
   { id: 21, title: 'Thể thao điện tử (Esports) xứng đáng được tranh huy chương chính thức tại Olympic?', category: 'society', upVotes: 420, downVotes: 190 },
   { id: 22, title: 'Con người sẽ xây dựng thành công thuộc địa trên Sao Hỏa trước năm 2050?', category: 'future', upVotes: 167, downVotes: 289 },
   { id: 23, title: 'Nên cấm trẻ em dưới 12 tuổi tiếp cận với các mạng xã hội phổ biến?', category: 'society', upVotes: 498, downVotes: 132 },
-  { id: 24, title: 'Xem phim tại rạp có trải nghiệm vượt trội hoàn toàn so với xem Netflix tại nhà?', category: 'lifestyle', upVotes: 280, downVotes: 250 },
+  { id: 24, title: 'Xem phim tại rạp có trải nghiệm vượt trội hoàn toàn so với xem Netflix tại nhà?', category: 'lifestyle', minUp: 280, upVotes: 280, downVotes: 250 },
   { id: 25, title: 'Cà phê máy pha kiểu Ý ngon và chất lượng hơn cà phê phin truyền thống?', category: 'lifestyle', upVotes: 142, downVotes: 399 },
   { id: 26, title: 'Nên luật hóa việc cấm sếp nhắn tin trao đổi công việc sau 6 giờ tối?', category: 'society', upVotes: 540, downVotes: 60 },
   { id: 27, title: 'Xe tự lái hoàn toàn sẽ giảm thiểu tai nạn giao thông hơn con người điều khiển?', category: 'future', upVotes: 298, downVotes: 176 },
