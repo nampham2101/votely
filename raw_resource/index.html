@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votely - Nền tảng bình chọn tối giản</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#4F46E5',
+                            DEFAULT: '#6366F1',
+                            dark: '#4338CA',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Hiệu ứng mượt mà cho các nút */
+        .btn-bounce {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-bounce:active {
+            transform: scale(0.92);
+        }
+        /* Tùy chỉnh thanh cuộn tinh tế */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E7EB;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/80 dark:bg-slate-950/80 border-b border-slate-100 dark:border-slate-900 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/25">
+                    V
+                </div>
+                <div>
+                    <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-indigo-600 to-purple-500 bg-clip-text text-transparent dark:from-indigo-400 dark:to-purple-300">Votely.</span>
+                    <span class="text-[10px] block font-medium text-slate-400 -mt-1 uppercase tracking-wider">Trưng cầu ý kiến</span>
+                </div>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="flex items-center gap-3">
+                <!-- User ID Badge -->
+                <div id="userIdBadge" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800 text-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-slate-500 dark:text-slate-400">ID:</span>
+                    <span id="displayUserId" class="font-mono font-semibold text-indigo-600 dark:text-indigo-400">--- --- ---</span>
+                    <button onclick="clearUserIdentity()" title="Xóa mã định danh" class="text-slate-400 hover:text-red-500 ml-1 transition-colors">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                </div>
+
+                <!-- Dark/Light Mode Toggle -->
+                <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Theme">
+                    <!-- Sun Icon -->
+                    <svg id="sunIcon" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 4.343l-.707-.707M14.828 14.828a4 4 0 11-5.656-5.656 4 4 0 015.656 5.656z" /></svg>
+                    <!-- Moon Icon -->
+                    <svg id="moonIcon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="relative overflow-hidden pt-12 pb-8 sm:pt-16 sm:pb-12 text-center">
+        <!-- Background decoration blur -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-indigo-500/10 dark:bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 mb-4 border border-indigo-100/30">
+                ⚡️ Tiếng nói của bạn định hình tương lai
+            </span>
+            <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
+                Bày tỏ quan điểm của bạn về <br class="hidden sm:inline">
+                <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Mọi Chủ Đề Nóng Hổi</span>
+            </h1>
+            <p class="mt-4 text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-light">
+                Dưới đây là 30 chủ đề tranh luận thú vị hiện nay. Hãy upvote nếu bạn đồng tình, downvote nếu phản đối. Ý kiến của bạn luôn được bảo mật bằng mã ẩn danh định danh.
+            </p>
+        </div>
+    </section>
+
+    <!-- SEARCH & FILTER BAR -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sticky top-16 z-30 py-3 bg-slate-50/90 dark:bg-slate-950/90 backdrop-blur-sm">
+        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+            <!-- Search input -->
+            <div class="relative flex-1 max-w-md">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+                    <svg class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                </span>
+                <input type="text" id="searchInput" oninput="filterTopics()" placeholder="Tìm kiếm chủ đề bạn quan tâm..." class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm transition-all shadow-sm">
+            </div>
+
+            <!-- Categories pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+                <button onclick="setCategoryFilter('all')" class="category-btn active px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-indigo-600 text-white shadow-sm shadow-indigo-500/10">
+                    Tất cả
+                </button>
+                <button onclick="setCategoryFilter('tech')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                    👨‍💻 Công nghệ
+                </button>
+                <button onclick="setCategoryFilter('lifestyle')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                    🍀 Đời sống
+                </button>
+                <button onclick="setCategoryFilter('society')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                    🗣️ Tranh cãi
+                </button>
+                <button onclick="setCategoryFilter('future')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/50 dark:border-slate-800/50">
+                    🚀 Tương lai
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN GRID OF TOPICS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 pb-16">
+        <!-- Status of results -->
+        <div class="mb-4 flex items-center justify-between">
+            <span id="resultsCount" class="text-xs text-slate-500 dark:text-slate-400 font-medium">Đang hiển thị 30/30 chủ đề</span>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-400">Sắp xếp:</span>
+                <select id="sortSelect" onchange="sortTopics()" class="text-xs font-semibold bg-transparent border-none text-indigo-600 dark:text-indigo-400 focus:outline-none focus:ring-0 cursor-pointer">
+                    <option value="default" class="bg-white dark:bg-slate-900">Mặc định</option>
+                    <option value="popular" class="bg-white dark:bg-slate-900">Nhiều vote nhất</option>
+                    <option value="up" class="bg-white dark:bg-slate-900">Nhiều Upvote nhất</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Empty state template -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-900 rounded-full flex items-center justify-center mb-4 text-slate-400">
+                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h3 class="font-bold text-lg">Không tìm thấy chủ đề nào</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xs mt-1">Hãy thử gõ từ khóa khác hoặc chuyển danh mục bộ lọc.</p>
+        </div>
+
+        <!-- Topics Grid -->
+        <div id="topicsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Topics will be dynamically loaded here by JS -->
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-200/50 dark:border-slate-900 bg-white dark:bg-slate-950 py-8 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:items-center sm:justify-between">
+            <p class="text-xs text-slate-400">&copy; 2026 Votely App. Thiết kế tối giản tối ưu cho trải nghiệm tĩnh.</p>
+            <div class="mt-4 sm:mt-0 flex justify-center gap-4 text-xs text-slate-400 font-medium">
+                <a href="#" class="hover:text-indigo-500 transition-colors">Điều khoản</a>
+                <span>&bull;</span>
+                <a href="#" class="hover:text-indigo-500 transition-colors">Bảo mật</a>
+                <span>&bull;</span>
+                <a href="javascript:void(0)" onclick="clearAllData()" class="hover:text-red-500 transition-colors">Reset dữ liệu gốc</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- POPUP / MODAL ĐỊNH DANH (9 CHỮ SỐ) -->
+    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden transition-all duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-100 dark:border-slate-800/50 transform scale-95 opacity-0 transition-all duration-300 ease-out" id="modalBox">
+            <!-- Close button -->
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <!-- Icon -->
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-5">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+            </div>
+
+            <!-- Header text -->
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Xác nhận định danh</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                Để thực hiện quyền bỏ phiếu và chống spam, vui lòng nhập một dãy số định danh gồm <span class="font-semibold text-indigo-500">9 chữ số</span> theo định dạng <code class="font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-indigo-500">xxx xxx xxx</code>. Thông tin này sẽ lưu trữ hoàn toàn ẩn danh tại máy của bạn.
+            </p>
+
+            <!-- Form -->
+            <div class="space-y-4">
+                <div>
+                    <label for="identityInput" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Dãy số định danh của bạn</label>
+                    <div class="relative">
+                        <input type="text" id="identityInput" placeholder="123 456 789" maxlength="11"
+                               class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-center font-mono text-xl tracking-widest font-bold placeholder-slate-300 dark:placeholder-slate-700">
+                    </div>
+                    <!-- Helper validation message -->
+                    <p id="validationMsg" class="mt-2 text-xs text-red-500 hidden items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        <span>Vui lòng điền đủ 9 chữ số theo đúng format!</span>
+                    </p>
+                </div>
+
+                <!-- Submit Button -->
+                <button onclick="saveIdentity()" class="w-full py-3.5 rounded-2xl bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 active:scale-[0.98] transition-all shadow-lg shadow-indigo-500/20">
+                    Xác nhận & Bỏ phiếu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP XÁC NHẬN XÓA ĐỊNH DANH (CUSTOM MODAL) -->
+    <div id="confirmDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden transition-all duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800/50 transform scale-95 opacity-0 transition-all duration-300 ease-out" id="deleteModalBox">
+            <!-- Icon Warning -->
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/50 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-4">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Xóa mã định danh?</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                Mọi quyền bình chọn của bạn vẫn được lưu trữ, nhưng bạn sẽ phải nhập lại mã định danh mới vào lần bình chọn tiếp theo.
+            </p>
+
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-750 transition-all">
+                    Hủy
+                </button>
+                <button onclick="confirmClearUserIdentity()" class="flex-1 py-3 rounded-xl bg-rose-600 text-white font-semibold text-xs hover:bg-rose-700 transition-all shadow-lg shadow-rose-500/10">
+                    Xác nhận xóa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP XÁC NHẬN RESET TOÀN BỘ DỮ LIỆU (CUSTOM MODAL) -->
+    <div id="confirmResetModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden transition-all duration-300">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"></div>
+        
+        <!-- Modal Content Container -->
+        <div class="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-slate-100 dark:border-slate-800/50 transform scale-95 opacity-0 transition-all duration-300 ease-out" id="resetModalBox">
+            <!-- Icon Warning -->
+            <div class="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/50 flex items-center justify-center text-amber-600 dark:text-amber-400 mb-4">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Khôi phục cài đặt gốc?</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                Thao tác này sẽ đặt lại toàn bộ lượt vote về trạng thái ban đầu và xóa thông tin định danh của bạn. Hành động này không thể hoàn tác.
+            </p>
+
+            <div class="flex gap-3">
+                <button onclick="closeResetModal()" class="flex-1 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs hover:bg-slate-200 dark:hover:bg-slate-750 transition-all">
+                    Hủy
+                </button>
+                <button onclick="confirmResetAllData()" class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs transition-all shadow-lg shadow-amber-500/10">
+                    Xác nhận Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION SYSTEM -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 30 CHỦ ĐỀ SẴN CÓ
+        const INITIAL_TOPICS = [
+            { id: 1, title: "Làm việc từ xa (Remote Work) 100% trọn đời nên trở thành tiêu chuẩn?", category: "tech", upVotes: 245, downVotes: 89 },
+            { id: 2, title: "Trí tuệ nhân tạo (AI) sẽ thay thế hoàn toàn lập trình viên trong 5 năm tới?", category: "tech", upVotes: 412, downVotes: 510 },
+            { id: 3, title: "Xe điện (EV) có thực sự thân thiện với môi trường hơn xe động cơ xăng?", category: "future", upVotes: 189, downVotes: 156 },
+            { id: 4, title: "Học đại học có còn là con đường bắt buộc để thành công trong kỷ nguyên số?", category: "lifestyle", upVotes: 320, downVotes: 210 },
+            { id: 5, title: "Vũ trụ ảo (Metaverse) là một bước tiến đột phá hay chỉ là chiêu trò marketing?", category: "future", upVotes: 98, downVotes: 342 },
+            { id: 6, title: "TikTok đang làm giảm nghiêm trọng khả năng tập trung của thế hệ trẻ?", category: "society", upVotes: 612, downVotes: 120 },
+            { id: 7, title: "Đánh thuế người siêu giàu lên tới 90% có giúp giải quyết bất bình đẳng?", category: "society", upVotes: 430, downVotes: 310 },
+            { id: 8, title: "Du lịch vũ trụ thương mại chỉ dành cho giới siêu giàu và nên bị hạn chế?", category: "future", upVotes: 152, downVotes: 233 },
+            { id: 9, title: "Sách giấy truyền thống sẽ bị thay thế hoàn toàn bởi sách điện tử Kindle?", category: "lifestyle", upVotes: 120, downVotes: 380 },
+            { id: 10, title: "Thịt nuôi cấy trong phòng thí nghiệm (Lab-grown meat) là tương lai ẩm thực?", category: "future", upVotes: 198, downVotes: 210 },
+            { id: 11, title: "Nên bắt đầu học lập trình với Python thay vì JavaScript?", category: "tech", upVotes: 289, downVotes: 145 },
+            { id: 12, title: "Chatbot AI có thể trở thành người bạn tri kỷ thực sự của con người?", category: "tech", upVotes: 145, downVotes: 388 },
+            { id: 13, title: "Chế độ làm việc 4 ngày một tuần (nghỉ 3 ngày) có thực tế tại Việt Nam?", category: "society", upVotes: 512, downVotes: 88 },
+            { id: 14, title: "Tiền mã hóa (Cryptocurrency) sẽ thay thế tiền giấy trong tương lai?", category: "future", upVotes: 220, downVotes: 410 },
+            { id: 15, title: "Nghe nhạc Lo-fi khi làm việc có thực sự giúp nâng cao hiệu suất?", category: "lifestyle", upVotes: 340, downVotes: 92 },
+            { id: 16, title: "Chụp ảnh bằng smartphone đã đủ thay thế máy ảnh chuyên nghiệp?", category: "tech", upVotes: 178, downVotes: 312 },
+            { id: 17, title: "Nên cấm hoàn toàn đồ nhựa dùng một lần bất chấp sự bất tiện trước mắt?", category: "society", upVotes: 450, downVotes: 78 },
+            { id: 18, title: "Nghệ thuật tạo ra bởi Trí tuệ nhân tạo (AI Art) có thực sự là nghệ thuật?", category: "tech", upVotes: 210, downVotes: 405 },
+            { id: 19, title: "Học ngoại ngữ qua ứng dụng điện thoại (Duolingo) hiệu quả hơn học trung tâm?", category: "lifestyle", upVotes: 230, downVotes: 290 },
+            { id: 20, title: "Xu hướng sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?", category: "lifestyle", upVotes: 388, downVotes: 110 },
+            { id: 21, title: "Thể thao điện tử (Esports) xứng đáng được tranh huy chương chính thức tại Olympic?", category: "society", upVotes: 420, downVotes: 190 },
+            { id: 22, title: "Con người sẽ xây dựng thành công thuộc địa trên Sao Hỏa trước năm 2050?", category: "future", upVotes: 167, downVotes: 289 },
+            { id: 23, title: "Nên cấm trẻ em dưới 12 tuổi tiếp cận với các mạng xã hội phổ biến?", category: "society", upVotes: 498, downVotes: 132 },
+            { id: 24, title: "Xem phim tại rạp có trải nghiệm vượt trội hoàn toàn so với xem Netflix tại nhà?", category: "lifestyle", upVotes: 280, downVotes: 250 },
+            { id: 25, title: "Cà phê máy pha kiểu Ý ngon và chất lượng hơn cà phê phin truyền thống?", category: "lifestyle", upVotes: 142, downVotes: 399 },
+            { id: 26, title: "Nên luật hóa việc cấm sếp nhắn tin trao đổi công việc sau 6 giờ tối?", category: "society", upVotes: 540, downVotes: 60 },
+            { id: 27, title: "Xe tự lái hoàn toàn sẽ giảm thiểu tai nạn giao thông hơn con người điều khiển?", category: "future", upVotes: 298, downVotes: 176 },
+            { id: 28, title: "Dùng ChatGPT hỗ trợ viết tiểu luận đại học có nên bị coi là gian lận?", category: "tech", upVotes: 310, downVotes: 380 },
+            { id: 29, title: "Robot có trí thông minh vượt trội có nên được trao quyền công dân cơ bản?", category: "future", upVotes: 89, downVotes: 512 },
+            { id: 30, title: "Trải nghiệm cận tử chứng minh rằng thế giới tâm linh sau cái chết là có thật?", category: "lifestyle", upVotes: 212, downVotes: 240 }
+        ];
+
+        // KHỞI TẠO STATE TRONG LOCAL STORAGE
+        let state = {
+            userId: localStorage.getItem('votely_userId') || null,
+            userVotes: JSON.parse(localStorage.getItem('votely_userVotes')) || {}, // Lưu trạng thái vote: { topicId: 'up' | 'down' }
+            topics: JSON.parse(localStorage.getItem('votely_topics')) || INITIAL_TOPICS,
+            currentCategory: 'all',
+            searchQuery: '',
+            pendingVote: null // { topicId, voteType } Lưu tạm thông tin vote đang chờ điền ID
+        };
+
+        // DOM Elements
+        const topicsGrid = document.getElementById('topicsGrid');
+        const emptyState = document.getElementById('emptyState');
+        const resultsCount = document.getElementById('resultsCount');
+        const authModal = document.getElementById('authModal');
+        const modalBox = document.getElementById('modalBox');
+        const identityInput = document.getElementById('identityInput');
+        const validationMsg = document.getElementById('validationMsg');
+        const userIdBadge = document.getElementById('userIdBadge');
+        const displayUserId = document.getElementById('displayUserId');
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+
+        // CHẠY KHI TẢI TRANG
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderHeaderUI();
+            renderTopics();
+            setupInputMask();
+        });
+
+        // ---------------------------------
+        // THEME & CORE UI CONTROL
+        // ---------------------------------
+        function initTheme() {
+            // Check localStorage or system prefers
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
+
+        function renderHeaderUI() {
+            if (state.userId) {
+                userIdBadge.classList.remove('hidden');
+                userIdBadge.classList.add('flex');
+                displayUserId.textContent = state.userId;
+            } else {
+                userIdBadge.classList.remove('flex');
+                userIdBadge.classList.add('hidden');
+            }
+        }
+
+        // ---------------------------------
+        // TOAST NOTIFICATIONS (Thay thế Alert)
+        // ---------------------------------
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            // Phong cách màu sắc dựa theo type
+            let bgStyles = 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white';
+            let iconColor = 'text-indigo-500';
+            let iconSvg = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+
+            if (type === 'success') {
+                bgStyles = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/30 text-emerald-900 dark:text-emerald-100';
+                iconColor = 'text-emerald-500';
+                iconSvg = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            } else if (type === 'error') {
+                bgStyles = 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/30 text-rose-900 dark:text-rose-100';
+                iconColor = 'text-rose-500';
+                iconSvg = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
+            }
+
+            toast.className = `flex items-center gap-3 p-4 rounded-2xl border shadow-lg transform translate-y-2 opacity-0 transition-all duration-300 ease-out pointer-events-auto ${bgStyles}`;
+            toast.innerHTML = `
+                <div class="${iconColor}">${iconSvg}</div>
+                <div class="text-xs font-semibold">${message}</div>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Animate out & remove
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // ---------------------------------
+        // RENDER TOPICS & FILTERING
+        // ---------------------------------
+        function renderTopics() {
+            // Filter
+            let filtered = state.topics.filter(topic => {
+                const matchesCategory = state.currentCategory === 'all' || topic.category === state.currentCategory;
+                const matchesSearch = topic.title.toLowerCase().includes(state.searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            // Sort
+            const sortBy = sortSelect.value;
+            if (sortBy === 'popular') {
+                filtered.sort((a, b) => (b.upVotes + b.downVotes) - (a.upVotes + a.downVotes));
+            } else if (sortBy === 'up') {
+                filtered.sort((a, b) => b.upVotes - a.upVotes);
+            } else {
+                // Sắp xếp mặc định theo ID tăng dần
+                filtered.sort((a, b) => a.id - b.id);
+            }
+
+            // Update count label
+            resultsCount.textContent = `Đang hiển thị ${filtered.length}/${state.topics.length} chủ đề`;
+
+            // Clear grid
+            topicsGrid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+
+            filtered.forEach(topic => {
+                const hasVoted = state.userVotes[topic.id]; // 'up' or 'down' or undefined
+                const isUpVoted = hasVoted === 'up';
+                const isDownVoted = hasVoted === 'down';
+
+                const total = topic.upVotes + topic.downVotes;
+                const upPercentage = total > 0 ? Math.round((topic.upVotes / total) * 100) : 50;
+                const downPercentage = total > 0 ? 100 - upPercentage : 50;
+
+                const categoryEmoji = getCategoryEmoji(topic.category);
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-6 shadow-sm hover:shadow-md hover:border-indigo-500/30 dark:hover:border-indigo-500/20 transition-all duration-300 flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <!-- Category Badge -->
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-bold tracking-wider uppercase bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                ${categoryEmoji} ${getCategoryName(topic.category)}
+                            </span>
+                            <span class="text-[11px] text-slate-400 font-medium">Tổng số: ${total} vote</span>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 class="font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-200 leading-snug line-clamp-3">
+                            ${topic.title}
+                        </h3>
+                    </div>
+
+                    <div class="mt-6 space-y-4">
+                        <!-- Progress bar -->
+                        <div class="space-y-1">
+                            <div class="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden flex">
+                                <div style="width: ${upPercentage}%" class="bg-gradient-to-r from-emerald-400 to-teal-500 h-full transition-all duration-500"></div>
+                                <div style="width: ${downPercentage}%" class="bg-gradient-to-r from-rose-400 to-pink-500 h-full transition-all duration-500"></div>
+                            </div>
+                            <div class="flex justify-between text-[10px] text-slate-400 font-semibold px-0.5">
+                                <span class="text-emerald-500 dark:text-emerald-400">${upPercentage}% Đồng thuận</span>
+                                <span class="text-rose-500 dark:text-rose-400">${downPercentage}% Phản đối</span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons Grid -->
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <!-- UP VOTE BUTTON -->
+                            <button onclick="handleVote(${topic.id}, 'up')" 
+                                    class="btn-bounce flex items-center justify-center gap-2 py-2.5 rounded-2xl border text-xs font-bold transition-all ${
+                                        isUpVoted 
+                                        ? 'bg-emerald-500 hover:bg-emerald-600 text-white border-transparent' 
+                                        : 'bg-emerald-50/50 dark:bg-emerald-950/10 border-emerald-100/50 dark:border-emerald-900/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500 hover:text-white hover:border-transparent dark:hover:bg-emerald-600'
+                                    }">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+                                </svg>
+                                <span>Up (${topic.upVotes})</span>
+                            </button>
+
+                            <!-- DOWN VOTE BUTTON -->
+                            <button onclick="handleVote(${topic.id}, 'down')" 
+                                    class="btn-bounce flex items-center justify-center gap-2 py-2.5 rounded-2xl border text-xs font-bold transition-all ${
+                                        isDownVoted 
+                                        ? 'bg-rose-500 hover:bg-rose-600 text-white border-transparent' 
+                                        : 'bg-rose-50/50 dark:bg-rose-950/10 border-rose-100/50 dark:border-rose-900/20 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white hover:border-transparent dark:hover:bg-rose-600'
+                                    }">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                                </svg>
+                                <span>Down (${topic.downVotes})</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                topicsGrid.appendChild(card);
+            });
+        }
+
+        function getCategoryEmoji(cat) {
+            switch(cat) {
+                case 'tech': return '👨‍💻';
+                case 'lifestyle': return '🍀';
+                case 'society': return '🗣️';
+                case 'future': return '🚀';
+                default: return '📌';
+            }
+        }
+
+        // Filter Handlers
+        function getCategoryName(cat) {
+            switch(cat) {
+                case 'tech': return 'Công nghệ';
+                case 'lifestyle': return 'Đời sống';
+                case 'society': return 'Tranh cãi';
+                case 'future': return 'Tương lai';
+                default: return 'Tổng hợp';
+            }
+        }
+
+        function setCategoryFilter(category) {
+            state.currentCategory = category;
+            
+            // Toggle active styles on buttons
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
+                btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            });
+
+            const activeBtn = event.currentTarget;
+            activeBtn.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+            activeBtn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
+
+            renderTopics();
+        }
+
+        function filterTopics() {
+            state.searchQuery = searchInput.value;
+            renderTopics();
+        }
+
+        function sortTopics() {
+            renderTopics();
+        }
+
+        // ---------------------------------
+        // VOTING LOGIC & PERSISTENCE
+        // ---------------------------------
+        function handleVote(topicId, voteType) {
+            // Kiểm tra xem đã định danh chưa
+            if (!state.userId) {
+                // Chưa định danh -> Mở popup, lưu lại lượt vote chuẩn bị thực hiện
+                state.pendingVote = { topicId, voteType };
+                openAuthModal();
+                return;
+            }
+
+            // Đã có định danh -> tiến hành xử lý vote
+            executeVote(topicId, voteType);
+        }
+
+        function executeVote(topicId, voteType) {
+            const topic = state.topics.find(t => t.id === topicId);
+            if (!topic) return;
+
+            const currentVoteState = state.userVotes[topicId];
+
+            if (currentVoteState === voteType) {
+                // Nhấn lại nút cũ -> hủy vote
+                if (voteType === 'up') {
+                    topic.upVotes = Math.max(0, topic.upVotes - 1);
+                } else {
+                    topic.downVotes = Math.max(0, topic.downVotes - 1);
+                }
+                delete state.userVotes[topicId];
+                showToast(`Đã thu hồi vote của bạn trên chủ đề này.`, 'info');
+            } else if (currentVoteState) {
+                // Nhấn nút khác với trạng thái cũ -> đổi vote
+                if (voteType === 'up') {
+                    topic.upVotes += 1;
+                    topic.downVotes = Math.max(0, topic.downVotes - 1);
+                } else {
+                    topic.downVotes += 1;
+                    topic.upVotes = Math.max(0, topic.upVotes - 1);
+                }
+                state.userVotes[topicId] = voteType;
+                showToast(`Đã chuyển đổi lượt bình chọn thành công!`, 'success');
+            } else {
+                // Vote mới tinh
+                if (voteType === 'up') {
+                    topic.upVotes += 1;
+                } else {
+                    topic.downVotes += 1;
+                }
+                state.userVotes[topicId] = voteType;
+                showToast(`Bình chọn thành công cho chủ đề!`, 'success');
+            }
+
+            // Đồng bộ dữ liệu vào LocalStorage
+            saveStateToLocalStorage();
+            renderTopics();
+        }
+
+        function saveStateToLocalStorage() {
+            localStorage.setItem('votely_topics', JSON.stringify(state.topics));
+            localStorage.setItem('votely_userVotes', JSON.stringify(state.userVotes));
+        }
+
+        // ---------------------------------
+        // AUTHFILTER (POPUP & IDENTITY VERIFICATION)
+        // ---------------------------------
+        function openAuthModal() {
+            authModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalBox.classList.remove('scale-95', 'opacity-0');
+                modalBox.classList.add('scale-100', 'opacity-100');
+                identityInput.focus();
+            }, 50);
+        }
+
+        function closeAuthModal() {
+            modalBox.classList.remove('scale-100', 'opacity-100');
+            modalBox.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                authModal.classList.add('hidden');
+                // reset error state
+                validationMsg.classList.add('hidden');
+                identityInput.value = '';
+                state.pendingVote = null;
+            }, 250);
+        }
+
+        // Tự động format input dạng xxx xxx xxx khi gõ
+        function setupInputMask() {
+            identityInput.addEventListener('input', (e) => {
+                // Lọc bỏ ký tự không phải số
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Format tự động "xxx xxx xxx"
+                let formatted = '';
+                if (value.length > 0) {
+                    formatted += value.substring(0, 3);
+                }
+                if (value.length > 3) {
+                    formatted += ' ' + value.substring(3, 6);
+                }
+                if (value.length > 6) {
+                    formatted += ' ' + value.substring(6, 9);
+                }
+                
+                e.target.value = formatted;
+                validationMsg.classList.add('hidden'); // ẩn báo lỗi khi gõ tiếp
+            });
+        }
+
+        function saveIdentity() {
+            const rawVal = identityInput.value;
+            // Validate định dạng 9 chữ số (regex kiểm tra định dạng xxx xxx xxx)
+            const idRegex = /^\d{3} \d{3} \d{3}$/;
+
+            if (!idRegex.test(rawVal)) {
+                validationMsg.classList.remove('hidden');
+                validationMsg.classList.add('flex');
+                // Rung nhẹ modal để báo động
+                modalBox.classList.add('animate-shake');
+                setTimeout(() => modalBox.classList.remove('animate-shake'), 500);
+                return;
+            }
+
+            // Lưu định danh hợp lệ
+            state.userId = rawVal;
+            localStorage.setItem('votely_userId', rawVal);
+            
+            // Cập nhật giao diện
+            renderHeaderUI();
+            showToast(`Chào mừng bạn! Định danh "${rawVal}" đã được kích hoạt.`, 'success');
+
+            // Xử lý lượt vote đang chờ (nếu có) trước khi mở popup
+            const pending = state.pendingVote;
+            closeAuthModal();
+
+            if (pending) {
+                setTimeout(() => {
+                    executeVote(pending.topicId, pending.voteType);
+                }, 400); // Đợi popup đóng hẳn rồi vote mượt mà
+            }
+        }
+
+        // ---------------------------------
+        // CUSTOM CONFIRM MODALS FOR ID DELETE & RESET ALL
+        // ---------------------------------
+        function clearUserIdentity() {
+            const modal = document.getElementById('confirmDeleteModal');
+            const box = document.getElementById('deleteModalBox');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('confirmDeleteModal');
+            const box = document.getElementById('deleteModalBox');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function confirmClearUserIdentity() {
+            state.userId = null;
+            localStorage.removeItem('votely_userId');
+            renderHeaderUI();
+            closeDeleteModal();
+            showToast("Đã gỡ bỏ mã định danh thành công.", "info");
+        }
+
+        // Reset dữ liệu hoàn toàn
+        function clearAllData() {
+            const modal = document.getElementById('confirmResetModal');
+            const box = document.getElementById('resetModalBox');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('confirmResetModal');
+            const box = document.getElementById('resetModalBox');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function confirmResetAllData() {
+            localStorage.removeItem('votely_userId');
+            localStorage.removeItem('votely_userVotes');
+            localStorage.removeItem('votely_topics');
+            
+            state.userId = null;
+            state.userVotes = {};
+            state.topics = INITIAL_TOPICS;
+            state.currentCategory = 'all';
+            state.searchQuery = '';
+            
+            // Reset categories pills
+            document.querySelectorAll('.category-btn').forEach((btn, index) => {
+                if (index === 0) {
+                    btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
+                } else {
+                    btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-sm', 'shadow-indigo-500/10');
+                    btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-100', 'dark:hover:bg-slate-800');
+                }
+            });
+            
+            closeResetModal();
+            renderHeaderUI();
+            renderTopics();
+            showToast("Đã khôi phục hoàn toàn cấu hình và dữ liệu gốc!", "success");
+        }
+    </script>
+
+    <!-- Custom Tailwind Style Extension for shaking vibration inside Modal -->
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-6px); }
+            20%, 40%, 60%, 80% { transform: translateX(6px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+        /* No scrollbar style helper */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body>
+</html>

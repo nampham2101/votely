@@ -1,0 +1,18 @@
+---
+description: Votely voting site — Vue 3 + Vite + Tailwind conventions
+globs:
+  - src/**/*
+  - index.html
+  - vite.config.js
+  - tailwind.config.js
+---
+
+# Votely project rules
+
+Read `AGENTS.md` at repo root before making changes.
+
+- Stack: Vue 3 Composition API, Vite, Tailwind (`darkMode: class`).
+- Do not edit `raw_resource/` unless explicitly asked.
+- Preserve localStorage keys in `src/constants/storage.js`.
+- UI copy in Vietnamese.
+- Run `npm run build` after non-trivial changes.
