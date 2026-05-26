@@ -107,7 +107,7 @@ function submit() {
               :value="identityInput"
               placeholder="123 456 789"
               maxlength="11"
-              class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-center font-mono text-xl tracking-widest font-bold placeholder-slate-300 dark:placeholder-slate-700"
+              class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-center font-mono text-xl tracking-widest font-bold text-slate-900 dark:text-white placeholder-slate-300 dark:placeholder-slate-700"
               @input="onInput"
             />
             <p

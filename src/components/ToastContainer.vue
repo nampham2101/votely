@@ -5,27 +5,28 @@ defineProps({
 
 const iconByType = {
   info: {
-    color: 'text-indigo-500',
+    color: 'text-indigo-400',
     path: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
   },
   success: {
-    color: 'text-emerald-500',
+    color: 'text-emerald-400',
     path: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
   },
   error: {
-    color: 'text-rose-500',
+    color: 'text-rose-400',
     path: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
   },
 }
 
+/** Fixed high-contrast styles — không đổi theo light/dark mode của trang */
 function toastClasses(type) {
   if (type === 'success') {
-    return 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/30 text-emerald-900 dark:text-emerald-100'
+    return 'bg-emerald-950 border-emerald-800/60 text-emerald-50'
   }
   if (type === 'error') {
-    return 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/30 text-rose-900 dark:text-rose-100'
+    return 'bg-rose-950 border-rose-900/60 text-rose-50'
   }
-  return 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white'
+  return 'bg-slate-900 border-slate-800 text-white'
 }
 </script>
 
@@ -35,7 +36,7 @@ function toastClasses(type) {
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="flex items-center gap-3 p-4 rounded-2xl border shadow-lg pointer-events-auto"
+        class="flex items-center gap-3 p-4 rounded-2xl border shadow-xl pointer-events-auto"
         :class="toastClasses(toast.type)"
       >
         <div :class="iconByType[toast.type]?.color ?? iconByType.info.color">

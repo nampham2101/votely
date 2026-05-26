@@ -183,7 +183,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:flex sm:items-center sm:justify-between gap-4">
             <p class="text-xs text-slate-400 order-2 sm:order-1">&copy; 2026 Votely App. Thiết kế tối giản tối ưu cho trải nghiệm tĩnh.</p>
             
-            <!-- Links & Email Contact (Đồng bộ thành chữ 'Liên hệ' không icon) -->
+            <!-- Links & Email Contact -->
             <div class="mt-4 sm:mt-0 flex flex-wrap justify-center items-center gap-x-4 gap-y-2 text-xs text-slate-400 font-medium order-1 sm:order-2">
                 <a href="mailto:allstarsmen@gmail.com" class="hover:text-indigo-500 transition-colors">Liên hệ</a>
                 <span class="text-slate-300 dark:text-slate-800">&bull;</span>
@@ -224,8 +224,9 @@
                 <div>
                     <label for="identityInput" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Dãy số định danh của bạn</label>
                     <div class="relative">
+                        <!-- Đã fix bug text màu đen trong dark mode bằng cách thêm: text-slate-900 dark:text-white -->
                         <input type="text" id="identityInput" placeholder="123 456 789" maxlength="11"
-                               class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-center font-mono text-xl tracking-widest font-bold placeholder-slate-300 dark:placeholder-slate-700">
+                               class="w-full px-4 py-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-center font-mono text-xl tracking-widest font-bold text-slate-900 dark:text-white placeholder-slate-300 dark:placeholder-slate-700">
                     </div>
                     <!-- Helper validation message -->
                     <p id="validationMsg" class="mt-2 text-xs text-red-500 hidden items-center gap-1">
@@ -324,7 +325,7 @@
             { id: 17, title: "Nên cấm hoàn toàn đồ nhựa dùng một lần bất chấp sự bất tiện trước mắt?", category: "society", upVotes: 450, downVotes: 78 },
             { id: 18, title: "Nghệ thuật tạo ra bởi Trí tuệ nhân tạo (AI Art) có thực sự là nghệ thuật?", category: "tech", upVotes: 210, downVotes: 405 },
             { id: 19, title: "Học ngoại ngữ qua ứng dụng điện thoại (Duolingo) hiệu quả hơn học trung tâm?", category: "lifestyle", upVotes: 230, downVotes: 290 },
-            { id: 20, title: "Xu hướng sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?", category: "lifestyle", upVotes: 388, downVotes: 110 },
+            { id: 20, title: "Xuương sống sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?", category: "lifestyle", upVotes: 388, downVotes: 110 },
             { id: 21, title: "Thể thao điện tử (Esports) xứng đáng được tranh huy chương chính thức tại Olympic?", category: "society", upVotes: 420, downVotes: 190 },
             { id: 22, title: "Con người sẽ xây dựng thành công thuộc địa trên Sao Hỏa trước năm 2050?", category: "future", upVotes: 167, downVotes: 289 },
             { id: 23, title: "Nên cấm trẻ em dưới 12 tuổi tiếp cận với các mạng xã hội phổ biến?", category: "society", upVotes: 498, downVotes: 132 },
@@ -413,28 +414,28 @@
         }
 
         // ---------------------------------
-        // TOAST NOTIFICATIONS (Thay thế Alert)
+        // TOAST NOTIFICATIONS
         // ---------------------------------
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
             
-            // Phong cách màu sắc dựa theo type
-            let bgStyles = 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white';
-            let iconColor = 'text-indigo-500';
+            // ĐÃ ĐỒNG BỘ STYLE: Sử dụng màu nền cố định có độ tương phản cao, không bị thay đổi theo Light/Dark Mode của hệ thống
+            let bgStyles = 'bg-slate-900 border-slate-800 text-white';
+            let iconColor = 'text-indigo-400';
             let iconSvg = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
 
             if (type === 'success') {
-                bgStyles = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/30 text-emerald-900 dark:text-emerald-100';
-                iconColor = 'text-emerald-500';
+                bgStyles = 'bg-emerald-950 border-emerald-800/60 text-emerald-50';
+                iconColor = 'text-emerald-400';
                 iconSvg = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
             } else if (type === 'error') {
-                bgStyles = 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/30 text-rose-900 dark:text-rose-100';
-                iconColor = 'text-rose-500';
+                bgStyles = 'bg-rose-950 border-rose-900/60 text-rose-50';
+                iconColor = 'text-rose-400';
                 iconSvg = `<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`;
             }
 
-            toast.className = `flex items-center gap-3 p-4 rounded-2xl border shadow-lg transform translate-y-2 opacity-0 transition-all duration-300 ease-out pointer-events-auto ${bgStyles}`;
+            toast.className = `flex items-center gap-3 p-4 rounded-2xl border shadow-xl transform translate-y-2 opacity-0 transition-all duration-300 ease-out pointer-events-auto ${bgStyles}`;
             toast.innerHTML = `
                 <div class="${iconColor}">${iconSvg}</div>
                 <div class="text-xs font-semibold">${message}</div>
@@ -447,13 +448,13 @@
                 toast.classList.remove('translate-y-2', 'opacity-0');
             }, 10);
 
-            // Animate out & remove
+            // ĐÃ SỬA BUG THỜI GIAN: Tăng thời gian hiển thị lên 5 giây (5000ms) để người dùng thoải mái đọc thông điệp
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-[-10px]');
                 setTimeout(() => {
                     toast.remove();
                 }, 300);
-            }, 3000);
+            }, 5000);
         }
 
         // ---------------------------------

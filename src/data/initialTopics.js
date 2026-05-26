@@ -18,7 +18,7 @@ export const INITIAL_TOPICS = [
   { id: 17, title: 'Nên cấm hoàn toàn đồ nhựa dùng một lần bất chấp sự bất tiện trước mắt?', category: 'society', upVotes: 450, downVotes: 78 },
   { id: 18, title: 'Nghệ thuật tạo ra bởi Trí tuệ nhân tạo (AI Art) có thực sự là nghệ thuật?', category: 'tech', upVotes: 210, downVotes: 405 },
   { id: 19, title: 'Học ngoại ngữ qua ứng dụng điện thoại (Duolingo) hiệu quả hơn học trung tâm?', category: 'lifestyle', upVotes: 230, downVotes: 290 },
-  { id: 20, title: 'Xu hướng sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?', category: 'lifestyle', upVotes: 388, downVotes: 110 },
+  { id: 20, title: 'Xuương sống sống tối giản (Minimalism) có thực sự mang lại hạnh phúc?', category: 'lifestyle', upVotes: 388, downVotes: 110 },
   { id: 21, title: 'Thể thao điện tử (Esports) xứng đáng được tranh huy chương chính thức tại Olympic?', category: 'society', upVotes: 420, downVotes: 190 },
   { id: 22, title: 'Con người sẽ xây dựng thành công thuộc địa trên Sao Hỏa trước năm 2050?', category: 'future', upVotes: 167, downVotes: 289 },
   { id: 23, title: 'Nên cấm trẻ em dưới 12 tuổi tiếp cận với các mạng xã hội phổ biến?', category: 'society', upVotes: 498, downVotes: 132 },
